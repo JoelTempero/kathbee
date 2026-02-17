@@ -1,6 +1,7 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Play, ArrowRight, ExternalLink, Music, Youtube, Facebook, Instagram } from 'lucide-react'
+import { Play, ArrowRight, ExternalLink, Music, Youtube, Facebook, Instagram, ChevronLeft, ChevronRight } from 'lucide-react'
 import AnimatedSection from '../components/ui/AnimatedSection'
 import SocialIcons from '../components/ui/SocialIcons'
 import { images, awards, services, testimonials, freeDownloads } from '../data/content'
@@ -23,7 +24,18 @@ const cubeFaces = [
   { platform: 'Bandcamp', icon: Music, color: '#629AA9', bg: 'bg-[#629AA9]', href: 'https://kathbee.bandcamp.com/', text: 'Buy music directly' },
 ]
 
+const kathVideos = [
+  { id: '9ue-p2xbjZE' },
+  { id: 'i1Q3amfRv0Q' },
+  { id: 'w8w-IIox4wA' },
+  { id: '3OA-_xagx7g' },
+  { id: 'JuwK8a2d4wk' },
+  { id: '1PmasG7Tbds' },
+]
+
 export default function Home() {
+  const [activeVideo, setActiveVideo] = useState(0)
+
   return (
     <>
       {/* Hero Section - Logo-centered with profile pic */}
@@ -196,9 +208,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* YouTube Videos Section */}
-      <section className="py-20 md:py-28 bg-gradient-to-b from-cream to-warm-white">
-        <div className="max-w-5xl mx-auto px-4 md:px-8">
+      {/* YouTube Videos Section — 3D CoverFlow Carousel */}
+      <section className="py-20 md:py-28 bg-gradient-to-b from-cream to-warm-white overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 md:px-8">
           <AnimatedSection className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl text-charcoal mb-3">Watch Kath's Videos 📺</h2>
             <p className="text-lg text-charcoal/60">
@@ -206,23 +218,107 @@ export default function Home() {
             </p>
           </AnimatedSection>
 
-          {/* Main featured video - channel uploads */}
           <AnimatedSection>
-            <div className="bg-white rounded-2xl p-4 md:p-6 shadow-lg mb-8">
-              <div className="aspect-video rounded-xl overflow-hidden">
-                <iframe
-                  src="https://www.youtube.com/embed/videoseries?list=UULFrGa0aMJf_rRm2sFf9kIzGw"
-                  title="Kath Bee - Latest Videos"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="w-full h-full"
+            <div
+              className="relative flex items-center justify-center"
+              style={{ perspective: '1200px', minHeight: '280px' }}
+            >
+              {kathVideos.map((video, i) => {
+                const offset = i - activeVideo
+                const absOffset = Math.abs(offset)
+                const isActive = offset === 0
+
+                return (
+                  <motion.div
+                    key={video.id}
+                    className="absolute w-[260px] md:w-[400px] lg:w-[480px] cursor-pointer"
+                    animate={{
+                      rotateY: offset * -25,
+                      z: -absOffset * 60,
+                      x: `${offset * 72}%`,
+                      scale: isActive ? 1 : Math.max(0.7, 1 - absOffset * 0.12),
+                      opacity: absOffset > 2 ? 0.3 : 1,
+                    }}
+                    transition={{ type: 'spring', stiffness: 200, damping: 25 }}
+                    style={{
+                      transformStyle: 'preserve-3d',
+                      zIndex: 10 - absOffset,
+                    }}
+                    onClick={() => !isActive && setActiveVideo(i)}
+                  >
+                    <div
+                      className={`bg-white rounded-2xl overflow-hidden shadow-lg transition-shadow ${
+                        isActive ? 'shadow-2xl ring-3 ring-honey/50' : 'hover:shadow-xl'
+                      }`}
+                    >
+                      <div className="aspect-video relative">
+                        {isActive ? (
+                          <iframe
+                            src={`https://www.youtube.com/embed/${video.id}?rel=0`}
+                            title="Kath Bee Video"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                            className="w-full h-full absolute inset-0"
+                          />
+                        ) : (
+                          <div className="relative group">
+                            <img
+                              src={`https://img.youtube.com/vi/${video.id}/hqdefault.jpg`}
+                              alt="Kath Bee Video thumbnail"
+                              className="w-full h-full object-cover"
+                              loading="lazy"
+                            />
+                            <div className="absolute inset-0 bg-black/20 flex items-center justify-center group-hover:bg-black/30 transition-colors">
+                              <div className="w-11 h-11 md:w-14 md:h-14 bg-white/90 rounded-full flex items-center justify-center shadow-md">
+                                <Play size={22} className="text-charcoal ml-0.5" />
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </motion.div>
+                )
+              })}
+
+              {/* Navigation arrows */}
+              {activeVideo > 0 && (
+                <button
+                  onClick={() => setActiveVideo(prev => prev - 1)}
+                  className="absolute left-2 md:left-6 z-20 w-10 h-10 md:w-12 md:h-12 bg-white/90 hover:bg-white rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-110"
+                  aria-label="Previous video"
+                >
+                  <ChevronLeft size={24} className="text-charcoal" />
+                </button>
+              )}
+              {activeVideo < kathVideos.length - 1 && (
+                <button
+                  onClick={() => setActiveVideo(prev => prev + 1)}
+                  className="absolute right-2 md:right-6 z-20 w-10 h-10 md:w-12 md:h-12 bg-white/90 hover:bg-white rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-110"
+                  aria-label="Next video"
+                >
+                  <ChevronRight size={24} className="text-charcoal" />
+                </button>
+              )}
+            </div>
+
+            {/* Dot indicators */}
+            <div className="flex justify-center gap-2 mt-8">
+              {kathVideos.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setActiveVideo(i)}
+                  className={`h-2.5 rounded-full transition-all ${
+                    i === activeVideo ? 'bg-honey w-8' : 'bg-charcoal/20 hover:bg-charcoal/40 w-2.5'
+                  }`}
+                  aria-label={`Video ${i + 1}`}
                 />
-              </div>
+              ))}
             </div>
           </AnimatedSection>
 
           {/* YouTube CTA */}
-          <AnimatedSection delay={0.1} className="text-center">
+          <AnimatedSection delay={0.1} className="text-center mt-8">
             <a
               href="https://www.youtube.com/kathbeesongs4kids/?sub_confirmation=1"
               target="_blank"
