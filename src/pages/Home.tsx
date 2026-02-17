@@ -25,16 +25,16 @@ const cubeFaces = [
 ]
 
 const kathVideos = [
-  { id: '9ue-p2xbjZE' },
   { id: 'i1Q3amfRv0Q' },
   { id: 'w8w-IIox4wA' },
+  { id: '9ue-p2xbjZE' },
   { id: '3OA-_xagx7g' },
   { id: 'JuwK8a2d4wk' },
   { id: '1PmasG7Tbds' },
 ]
 
 export default function Home() {
-  const [activeVideo, setActiveVideo] = useState(0)
+  const [activeVideo, setActiveVideo] = useState(2)
 
   return (
     <>
