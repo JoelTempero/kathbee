@@ -221,7 +221,7 @@ export default function Home() {
           <AnimatedSection>
             <div
               className="relative flex items-center justify-center"
-              style={{ perspective: '1200px', minHeight: '280px' }}
+              style={{ perspective: '1200px', minHeight: '380px' }}
             >
               {kathVideos.map((video, i) => {
                 const offset = i - activeVideo
@@ -235,8 +235,8 @@ export default function Home() {
                     animate={{
                       rotateY: offset * -25,
                       z: -absOffset * 60,
-                      x: `${offset * 72}%`,
-                      scale: isActive ? 1 : Math.max(0.7, 1 - absOffset * 0.12),
+                      x: `${offset * 82}%`,
+                      scale: isActive ? 1.35 : Math.max(0.65, 0.85 - absOffset * 0.1),
                       opacity: absOffset > 2 ? 0.3 : 1,
                     }}
                     transition={{ type: 'spring', stiffness: 200, damping: 25 }}
