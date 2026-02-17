@@ -261,19 +261,12 @@ export default function Home() {
                             className="w-full h-full absolute inset-0"
                           />
                         ) : (
-                          <div className="relative group">
-                            <img
-                              src={`https://img.youtube.com/vi/${video.id}/hqdefault.jpg`}
-                              alt="Kath Bee Video thumbnail"
-                              className="w-full h-full object-cover"
-                              loading="lazy"
-                            />
-                            <div className="absolute inset-0 bg-black/20 flex items-center justify-center group-hover:bg-black/30 transition-colors">
-                              <div className="w-11 h-11 md:w-14 md:h-14 bg-white/90 rounded-full flex items-center justify-center shadow-md">
-                                <Play size={22} className="text-charcoal ml-0.5" />
-                              </div>
-                            </div>
-                          </div>
+                          <img
+                            src={`https://img.youtube.com/vi/${video.id}/hqdefault.jpg`}
+                            alt="Kath Bee Video thumbnail"
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                          />
                         )}
                       </div>
                     </div>
