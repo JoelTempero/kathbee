@@ -101,7 +101,7 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} Kath Bee. All rights reserved.
           </p>
           <p className="text-white/30 text-xs mt-2">
-            Made with 🐝 in Nelson, New Zealand
+            Site crafted by <a href="https://sidequest.nz" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-white/70 transition-colors no-underline">sidequest.nz</a>
           </p>
         </div>
       </div>
